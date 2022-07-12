@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
 
+//no user inputted
 const db = knex({
   client: "pg",
   connection: {
