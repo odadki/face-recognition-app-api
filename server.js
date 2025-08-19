@@ -4,6 +4,12 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
+const fetch = require("node-fetch");
+require("dotenv").config();
+
+console.log("PAT:", process.env.CLARIFAI_PAT);
+console.log("USER_ID:", process.env.CLARIFAI_USER_ID);
+console.log("APP_ID:", process.env.CLARIFAI_APP_ID);
 
 //no user inputted
 const db = knex({
@@ -111,11 +117,41 @@ app.put("/image", (req, res) => {
     .catch((err) => res.status(400).json("unable to get entries"));
 });
 
-app.listen(3000, () => {
-  console.log("app is running on port 3000");
+app.listen(5001, () => {
+  console.log("app is running on port 5001");
 });
 
 //signin POST = success/fail
 //register --> POST = user
 //profile/:userID --> GET = user
 //image PUT --> user
+
+app.post("/clarifai", (req, res) => {
+  const { input } = req.body;
+
+  const raw = JSON.stringify({
+    user_app_id: {
+      user_id: process.env.CLARIFAI_USER_ID, // store these in environment variables
+      app_id: process.env.CLARIFAI_APP_ID,
+    },
+    inputs: [
+      {
+        data: {
+          image: { url: input },
+        },
+      },
+    ],
+  });
+
+  fetch("https://api.clarifai.com/v2/models/face-detection/outputs", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: "Key " + process.env.CLARIFAI_PAT,
+    },
+    body: raw,
+  })
+    .then((response) => response.json())
+    .then((data) => res.json(data))
+    .catch((err) => res.status(400).json("unable to work with Clarifai API"));
+});
