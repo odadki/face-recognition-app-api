@@ -24,7 +24,15 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: "https://odadki.github.io",
+    methods: ["GET", "POST", "PUT"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 // app.use(bodyParser.json());
 
@@ -105,17 +113,17 @@ app.use(express.json());
 //     .catch((err) => res.status(400).json("error getting user"));
 // });
 
-// app.put("/image", (req, res) => {
-//   const { id } = req.body;
-//   db("users")
-//     .where("id", "=", id)
-//     .increment("entries", 1)
-//     .returning("entries")
-//     .then((entries) => {
-//       res.json(entries[0].entries);
-//     })
-//     .catch((err) => res.status(400).json("unable to get entries"));
-// });
+app.put("/image", (req, res) => {
+  const { id } = req.body;
+  db("users")
+    .where("id", "=", id)
+    .increment("entries", 1)
+    .returning("entries")
+    .then((entries) => {
+      res.json(entries[0].entries);
+    })
+    .catch((err) => res.status(400).json("unable to get entries"));
+});
 
 // app.listen(5001, () => {
 //   console.log("app is running on port 5001");
