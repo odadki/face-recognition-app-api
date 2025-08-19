@@ -117,8 +117,13 @@ app.use(express.json());
 //     .catch((err) => res.status(400).json("unable to get entries"));
 // });
 
-app.listen(5001, () => {
-  console.log("app is running on port 5001");
+// app.listen(5001, () => {
+//   console.log("app is running on port 5001");
+// });
+
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => {
+  console.log(`app is running on port ${PORT}`);
 });
 
 //signin POST = success/fail
