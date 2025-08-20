@@ -12,15 +12,15 @@ require("dotenv").config();
 // console.log("APP_ID:", process.env.CLARIFAI_APP_ID);
 
 //no user inputted
-// const db = knex({
-//   client: "pg",
-//   connection: {
-//     host: "127.0.0.1",
-//     user: "",
-//     password: "",
-//     database: "smart-brain",
-//   },
-// });
+const db = knex({
+  client: "pg",
+  connection: {
+    host: "127.0.0.1",
+    user: "",
+    password: "",
+    database: "smart-brain",
+  },
+});
 
 const app = express();
 
